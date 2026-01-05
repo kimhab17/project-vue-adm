@@ -1,75 +1,76 @@
-import { ref, computed, reactive } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/api";
 
-export const useArtitleStore = defineStore("article", () => {
-  let articles = ref([]);
-  let article = ref(null);
-  let my_article = ref([]);
+export const useArticleStore = defineStore("article", () => {
+  // state
+  const articles = ref([]);
+  const article = ref(null);
+  const my_article = ref([]);
 
-  let isLoadding = ref(false);
-  let my_loading = ref(false);
+  const isLoading = ref(false);
+  const my_loading = ref(false);
 
-  //   get all article
+  // get all articles
   const getAllArticle = async () => {
+    isLoading.value = true;
     try {
-      isLoadding.value = true;
       const res = await api.get("/articles");
-      articles.value = res.data.data.items;
+      console.log("All fetch api: ", res.data.items);
+      articles.value = res.data?.data?.items ?? [];
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
-      isLoadding.value = false;
+      isLoading.value = false;
     }
   };
 
-  //   get a article by id
+  // get article by id
   const getArticleById = async (id) => {
     try {
       const res = await api.get(`/articles/${id}`);
-      article.value = res.data.data;
-      // console.log("aArtice:", article.value);
+      article.value = res.data?.data ?? null;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  // get own article
+  // get own articles
   const getOwnArticle = async () => {
+    my_loading.value = true;
     try {
-      my_loading.value = true;
-      const res = await api.get(`/articles/own`);
-      // console.log("Own Article: ", res.data.data.items);
-      my_article.value = res.data.data.items;
-      my_loading.value = false;
-    } catch (err) {
-      console.log(err);
+      const res = await api.get("/articles/own");
+      my_article.value = res.data?.data?.items ?? [];
+    } catch (error) {
+      console.error(error);
     } finally {
-      console.log("Success");
+      my_loading.value = false;
     }
   };
 
   // create article
   const createArticle = async (payload) => {
     try {
-      const res = await api.post(`/articles`, payload);
-      console.log(res.data);
+      const res = await api.post("/articles", payload);
       return res.data;
-    } catch (err) {
-      console.log(err);
-    } finally {
-      console.log("Error");
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   };
 
-  // create thumnail article
+  // create thumbnail
   const createThumbnail = async (id, payload) => {
     try {
       const res = await api.post(`/articles/${id}/thumbnail`, payload, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-    } catch (err) {
-      console.log(err);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   };
 
@@ -77,24 +78,33 @@ export const useArtitleStore = defineStore("article", () => {
   const deleteArticle = async (id) => {
     try {
       const res = await api.delete(`/articles/${id}`);
-      console.log("delete article mss:", res.data);
-    } catch (err) {
-      console.log(err);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   };
 
   // update article
   const updateArticle = async (id, payload) => {
-    // console.log("update Article Id:", id);
-    // console.log("data form update", payload);
     try {
       const res = await api.put(`/articles/${id}`, payload);
-      console.log("Respone Update:", res.data);
-    } catch (err) {
-      console.log(err);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   };
+
   return {
+    // state
+    articles,
+    article,
+    my_article,
+    isLoading,
+    my_loading,
+
+    // actions
     getAllArticle,
     getArticleById,
     getOwnArticle,
@@ -102,10 +112,5 @@ export const useArtitleStore = defineStore("article", () => {
     createThumbnail,
     deleteArticle,
     updateArticle,
-    my_article,
-    my_loading,
-    isLoadding,
-    articles,
-    article,
   };
 });

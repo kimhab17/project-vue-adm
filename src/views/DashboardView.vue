@@ -18,11 +18,11 @@
 </template>
 <script setup>
 import ArticleCard from '@/components/common/ArticleCard.vue';
-import { useArtitleStore } from '@/stores/article';
+import { useArticleStore } from '@/stores/article';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const artStore = useArtitleStore();
+const artStore = useArticleStore();
 const router = useRouter();
 
 // link to create article page

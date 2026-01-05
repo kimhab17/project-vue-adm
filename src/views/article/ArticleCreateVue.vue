@@ -20,11 +20,11 @@
 <script setup>
 import { ref } from 'vue';
 import ArticleForm from '@/components/form/ArticleForm.vue';
-import { useArtitleStore } from '@/stores/article';
+import { useArticleStore } from '@/stores/article';
 import { useRouter } from 'vue-router';
 
 const articleFormRef = ref(null);
-const articleStore = useArtitleStore();
+const articleStore = useArticleStore();
 const router = useRouter();
 const isLoading = ref(false)
 
