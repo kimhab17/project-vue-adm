@@ -3,7 +3,7 @@
 <template>
     <form class="grid gap-3 content-start">
         <div>
-            <BaseInput label="Title *" v-model="formData.title" :error="errors.title"
+            <BaseInput label="Title *" v-model="formData.title" :error="errors.title" placeholder="Please Input Title"
                 @blur="validateField('title', formData.title, 'Title is required')" />
         </div>
         <div>
@@ -60,11 +60,9 @@ const formData = ref({
 const existingThumbnail = ref('');
 
 // const fileInputRef = ref(null)
-
 onMounted(async () => {
     await categoryStore.fetchCategories()
 })
-
 
 const thumbnailPreview = ref('');
 const onThumbnailChange = (event) => {

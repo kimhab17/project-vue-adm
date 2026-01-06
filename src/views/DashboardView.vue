@@ -14,6 +14,11 @@
                     :avatar="art.avatar" :creatorName="art.creatorName" />
             </div>
         </div>
+        <div class="position-absolute start-50">
+            <base-button v-if="artStore.hasMore" @click="artStore.fetchMoreArticles" :isLoading="artStore.isLoadding">
+                {{ artStore ? 'load More' : 'Loading...' }}
+            </base-button>
+        </div>
     </div>
 </template>
 <script setup>

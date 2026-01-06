@@ -15,8 +15,8 @@
                                     class="meta-avatar">
                                 <div class="meta-info">
                                     <p class="meta-author">{{ article?.creator.firstName }} {{ article?.creator.lastName
-                                        }}</p>
-                                    <p class="meta-date">Published 2 days ago</p>
+                                    }}</p>
+                                    <p class="meta-date">{{ formatDate(article) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +60,7 @@
 import { onMounted, ref } from 'vue';
 import { useArtitleStore } from '@/stores/article';
 import { useRoute } from 'vue-router';
+import { formatDate } from '@/utils/dateFormat';
 
 const ArtitleStore = useArtitleStore();
 const route = useRoute();
@@ -70,8 +71,7 @@ let article = ref(null);
 onMounted(async () => {
     await ArtitleStore.getArticleById(route.params.id);
     article.value = ArtitleStore.article;
-    // console.log(article)
-})
+});
 </script>
 
 <style scoped>

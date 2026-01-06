@@ -16,12 +16,13 @@
 import { useSideStatusStore } from '@/stores/sidebarStatus';
 import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
+
 const statuesModal = useSideStatusStore();
 const authStore = useAuthStore();
 const User = authStore.user;
 const userName = ref("");
 const userImg = ref("");
-console.log("User navbar: ", User);
+
 userName.value = User.firstName + " " + User.lastName;
 userImg.value = User.avatar;
 </script>

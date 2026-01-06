@@ -31,11 +31,25 @@
                 </template>
                 <template #column-category="{ item }">
                     <span class="fw-medium">
-                        {{ item.category?.name }}
+                        <div v-if="item.category?.name == null">
+                            <span>null</span>
+                        </div>
+                        <div v-else>
+                            {{ item.category?.name }}
+                        </div>
                     </span>
                 </template>
-                <template #columns-content="{ item }">
+                <template #column-content="{ item }">
                     <span class=" line-clamp-1 w-70">{{ item.content }}</span>
+                </template>
+                <template #column-thumbnail="{ item }">
+                    <!-- <span class=" line-clamp-1 w-70"> -->
+                    <!-- {{ item.thumbnail }} -->
+                    <!-- <img src="" alt=""> -->
+                    <!-- </span> -->
+                    <div style="width: 60px; height: 60px;">
+                        <img style="width: 100%; height: 100%;" :src="item.thumbnail" alt="">
+                    </div>
                 </template>
             </base-table>
         </div>
@@ -61,6 +75,7 @@ const columns = [
     { key: 'title', label: 'Title' },
     { key: 'category', label: 'Category' },
     { key: 'content', label: 'Content' },
+    { key: 'thumbnail', label: 'Thumbnail' },
 ];
 
 // handle edit article 

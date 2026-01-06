@@ -46,7 +46,6 @@ const handlePublish = async () => {
             categoryId: Number(form.categoryId),
             content: form.content.trim(),
         });
-
         const articleId = res.data.id;
 
         // post thumnail

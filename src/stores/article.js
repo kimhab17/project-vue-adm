@@ -10,12 +10,31 @@ export const useArtitleStore = defineStore("article", () => {
   let isLoadding = ref(false);
   let my_loading = ref(false);
 
+  const page = ref(1);
+  const hasMore = ref(true);
+
   //   get all article
-  const getAllArticle = async () => {
+  const getAllArticle = async (isLoadMore = false) => {
+    isLoadding.value = true;
     try {
-      isLoadding.value = true;
-      const res = await api.get("/articles");
-      articles.value = res.data.data.items;
+      const res = await api.get("/articles", {
+        params: {
+          _page: page.value,
+          _per_page: 9,
+          sortBy: "createdAt",
+          sortDir: "desc",
+        },
+      });
+
+      const items = res.data.data.items || [];
+      if (isLoadMore) {
+        articles.value.push(...items);
+      } else {
+        page.value = 1;
+        articles.value = items;
+      }
+
+      hasMore.value = res.data.data.meta.hasNextPage === true;
     } catch (error) {
       console.log(error);
     } finally {
@@ -23,12 +42,17 @@ export const useArtitleStore = defineStore("article", () => {
     }
   };
 
+  const fetchMoreArticles = async () => {
+    if (!hasMore.value) return;
+    page.value++;
+    await getAllArticle(true);
+  };
+
   //   get a article by id
   const getArticleById = async (id) => {
     try {
       const res = await api.get(`/articles/${id}`);
       article.value = res.data.data;
-      // console.log("aArtice:", article.value);
     } catch (error) {
       console.log(error);
     }
@@ -85,15 +109,14 @@ export const useArtitleStore = defineStore("article", () => {
 
   // update article
   const updateArticle = async (id, payload) => {
-    // console.log("update Article Id:", id);
-    // console.log("data form update", payload);
     try {
       const res = await api.put(`/articles/${id}`, payload);
-      console.log("Respone Update:", res.data);
+      return res.data;
     } catch (err) {
       console.log(err);
     }
   };
+
   return {
     getAllArticle,
     getArticleById,
@@ -102,6 +125,8 @@ export const useArtitleStore = defineStore("article", () => {
     createThumbnail,
     deleteArticle,
     updateArticle,
+    fetchMoreArticles,
+    hasMore,
     my_article,
     my_loading,
     isLoadding,

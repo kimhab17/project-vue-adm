@@ -11,6 +11,7 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import ArticleForm from '@/components/form/ArticleForm.vue';
 import { onMounted, ref } from 'vue';
@@ -25,10 +26,7 @@ const articleStore = useArtitleStore();
 let articleFormRef = ref(null);
 let id = Number(route.params.id);
 let isLoding = ref(false);
-
 // point to form data in article form by ref
-
-
 
 // get aticle by id to provide value in input
 onMounted(async () => {
@@ -38,11 +36,12 @@ onMounted(async () => {
     await articleStore.getArticleById(id);
 
     form.title = articleStore.article.title;
-    form.categoryId = articleStore.article.category
-        ? articleStore.article.category.id
-        : null;
-    form.thumbnail = articleStore.article.thumbnail;
+    form.categoryId = articleStore.article.category?.id
+    // ? articleStore.article.category.id
+    // : null;
+    // form.thumbnail = articleStore.article.thumbnail;
     form.content = articleStore.article.content;
+    formRef.existingThumbnail = articleStore.article.thumbnail || '';
 })
 
 const handleUpdateArticle = async () => {
@@ -57,6 +56,11 @@ const handleUpdateArticle = async () => {
             categoryId: Number(form.categoryId),
             content: form.content.trim()
         });
+        if (form.thumbnail instanceof File) {
+            const uploadData = new FormData()
+            uploadData.append('thumbnail', form.thumbnail)
+            await articleStore.createThumbnail(id, uploadData)
+        }
         router.push({ name: 'article.index' })
         isLoding.value = false;
     }
