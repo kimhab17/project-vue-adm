@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import ArticlePreviewView from "@/views/article/ArticlePreviewView.vue";
 import ArticleEdit from "@/views/article/ArticleEdit.vue";
+import CategoryView from "@/views/category/CategoryView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -49,6 +50,12 @@ const router = createRouter({
               meta: { title: "Edit-Article" },
             },
           ],
+        },
+        {
+          path: "category",
+          name: "category",
+          component: CategoryView,
+          meta: { title: "Category" },
         },
       ],
       linkActiveClass: "active btn btn-primary text-light",

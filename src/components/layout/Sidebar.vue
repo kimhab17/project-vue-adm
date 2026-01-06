@@ -42,6 +42,10 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <RouterLink class="nav-link" to="category">Category
+                    </RouterLink>
+                </li>
 
                 <!-- Logout -->
                 <li class="nav-item mt-3">
