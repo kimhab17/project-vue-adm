@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 export const useCategoryStore = defineStore("category", () => {
   const categories = ref([]);
+  const category = ref(null);
   const isLoading = ref(false);
   const delete_loading = ref(false);
   const update_loading = ref(false);
@@ -43,11 +44,32 @@ export const useCategoryStore = defineStore("category", () => {
     }
   };
 
+  const createCategory = async (payload) => {
+    try {
+      const res = await api.post(`/categories`, payload);
+      console.log("res create", res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getCategoryById = async (id) => {
+    try {
+      const res = await api.get(`/categories/${id}`);
+      category.value = res.data.data.name;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     categories,
     isLoading,
+    category,
     fetchCategories,
     deleteCategory,
     updateCategory,
+    createCategory,
+    getCategoryById,
   };
 });

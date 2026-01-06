@@ -9,6 +9,7 @@ export const useArtitleStore = defineStore("article", () => {
 
   let isLoadding = ref(false);
   let my_loading = ref(false);
+  let search = ref("");
 
   const page = ref(1);
   const hasMore = ref(true);
@@ -23,9 +24,10 @@ export const useArtitleStore = defineStore("article", () => {
           _per_page: 9,
           sortBy: "createdAt",
           sortDir: "desc",
+          search: search.value,
         },
       });
-
+      console.log(res.data);
       const items = res.data.data.items || [];
       if (isLoadMore) {
         articles.value.push(...items);
@@ -132,5 +134,6 @@ export const useArtitleStore = defineStore("article", () => {
     isLoadding,
     articles,
     article,
+    search,
   };
 });
