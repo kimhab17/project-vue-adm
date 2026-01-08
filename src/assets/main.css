@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 :root {
-  --btn-default: #5772f9;
+  --btn-default: #5772f996;
   --btn-hover: #5772f99d;
   --bg-gradient: #dddd;
+
 }

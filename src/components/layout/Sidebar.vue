@@ -54,7 +54,7 @@
 
         <!-- Logout -->
         <li class="nav-item mt-3">
-          <base-button type="button" @click="statusModal" variants="danger"
+          <base-button type="button" @click="statusModal" variants="primary"
             >Logout</base-button
           >
         </li>
@@ -93,8 +93,9 @@ async function handleLogout() {
   left: 0;
   width: 250px;
   height: calc(100vh - 56px);
-  background-color: #dddd;
-  color: #fff;
+  background-color: #fafafadd;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px;
+
   transition: transform 0.3s ease;
   overflow-y: auto;
 }
@@ -104,7 +105,8 @@ async function handleLogout() {
 }
 
 .nav-link {
-  color: #ffffff;
+  /* color: #ffffff; */
+
   font-weight: 500;
 }
 
@@ -116,6 +118,7 @@ async function handleLogout() {
 .nav-link:hover {
   color: #fff;
   background-color: var(--btn-hover);
+  color: #1c3cddce;
 }
 
 .sidebar .text-secondary {
