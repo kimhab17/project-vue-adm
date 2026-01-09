@@ -13,11 +13,14 @@
             <div class="col-12 text-center py-5" v-if="!artStore.articles?.length">
                 <NotFound />
             </div>
-            <div class="col-md-4 mb-4" v-for="art in artStore.articles" :key="art.id">
-                <ArticleCaedSkeleton v-if="artStore.isLoadding" />
-                <!-- loading article -->
+            <div v-else-if="artStore.isLoadding" class="col-4" v-for="n in 8" :key="n">
+                <div>
+                    <ArticleCaedSkeleton />
+                </div>
+            </div>
+            <div v-else class="col-md-4 mb-4" v-for="art in artStore.articles" :key="art.id">
                 <ArticleCard :id="art.id" :title="art.title" :thumbnail="art.thumbnail" :content="art.content"
-                    :avatar="art.avatar" :creatorName="art.creatorName" />
+                    :avatar="art.creator.avatar" :creatorName="art.creator.firstName + art.creator.lastName" />
             </div>
         </div>
         <div class="position-absolute start-50">
@@ -42,6 +45,7 @@ function createArticle() {
     router.push({ name: 'article.create' })
 }
 
+// set time out for search
 let timeout = null;
 watch(
     () => artStore.search,
@@ -56,5 +60,6 @@ watch(
 // load all article from api
 onMounted(async () => {
     await artStore.getAllArticle();
+    console.log("get all art:", artStore.articles);
 });
 </script>

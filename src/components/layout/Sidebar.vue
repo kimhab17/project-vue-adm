@@ -20,7 +20,8 @@
 
             <ul class="nav nav-pills flex-column gap-1">
                 <li class="nav-item">
-                    <RouterLink class="nav-link active" to="/"> <i class="bi bi-speedometer me-2"></i>Dashboard
+                    <RouterLink class="nav-link active" :to="{ name: 'dashboard' }"> <i
+                            class="bi bi-speedometer me-2"></i>Dashboard
                     </RouterLink>
                 </li>
 
@@ -34,10 +35,11 @@
                     <div class="collapse" id="articleCollapse">
                         <ul class="nav flex-column ms-3 mt-1">
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/article">All Article</RouterLink>
+                                <RouterLink class="nav-link" :to="{ name: 'article.index' }">All Article</RouterLink>
                             </li>
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/article/create">Create Article</RouterLink>
+                                <RouterLink class="nav-link" :to="{ name: 'article.create' }">Create Article
+                                </RouterLink>
                             </li>
                         </ul>
                     </div>

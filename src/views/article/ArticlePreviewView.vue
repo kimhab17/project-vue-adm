@@ -10,12 +10,13 @@
                     <div class="article-card-body">
                         <h1 class="article-title">{{ article?.title }}</h1>
                         <div class="article-meta">
-                            <div class="meta-item">
+                            <div class="meta-item" @click="handleViewcreator">
                                 <img :src="article?.creator.avatar" :alt="article?.creator.firstName"
                                     class="meta-avatar">
                                 <div class="meta-info">
-                                    <p class="meta-author">{{ article?.creator.firstName }} {{ article?.creator.lastName
-                                    }}</p>
+                                    <p class="meta-author">{{ article?.creator.firstName }} {{
+                                        article?.creator.lastName
+                                        }}</p>
                                     <p class="meta-date">{{ formatDate(article) }}</p>
                                 </div>
                             </div>
@@ -59,11 +60,12 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useArtitleStore } from '@/stores/article';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { formatDate } from '@/utils/dateFormat';
 
 const ArtitleStore = useArtitleStore();
 const route = useRoute();
+const router = useRouter();
 let article = ref(null);
 
 // for jam data load os derm 3 render jea muy component
@@ -72,6 +74,9 @@ onMounted(async () => {
     await ArtitleStore.getArticleById(route.params.id);
     article.value = ArtitleStore.article;
 });
+const handleViewcreator = async () => {
+    router.push({ name: 'creator', params: { id: article.value.creator.id } })
+}
 </script>
 
 <style scoped>

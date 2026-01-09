@@ -43,10 +43,6 @@
                     <span class=" line-clamp-1 w-70">{{ item.content }}</span>
                 </template>
                 <template #column-thumbnail="{ item }">
-                    <!-- <span class=" line-clamp-1 w-70"> -->
-                    <!-- {{ item.thumbnail }} -->
-                    <!-- <img src="" alt=""> -->
-                    <!-- </span> -->
                     <div style="width: 60px; height: 60px;">
                         <img style="width: 100%; height: 100%;" :src="item.thumbnail" alt="">
                     </div>
