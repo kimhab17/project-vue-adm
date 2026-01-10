@@ -14,10 +14,9 @@
                 <NotFound />
             </div>
             <div v-else-if="artStore.isLoadding" class="col-4" v-for="n in 8" :key="n">
-                <div>
-                    <ArticleCaedSkeleton />
-                </div>
+                <ArticleCaedSkeleton />
             </div>
+
             <div v-else class="col-md-4 mb-4" v-for="art in artStore.articles" :key="art.id">
                 <ArticleCard :id="art.id" :title="art.title" :thumbnail="art.thumbnail" :content="art.content"
                     :avatar="art.creator.avatar" :creatorName="art.creator.firstName + art.creator.lastName" />

@@ -11,6 +11,7 @@ import CategoryView from "@/views/category/CategoryView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ForbddenView from "@/views/ForbddenView.vue";
 import ACreatorView from "@/views/profile/aCreatorView.vue";
+import OwnProfile from "@/views/profile/ownProfile.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -66,6 +67,12 @@ const router = createRouter({
           component: ACreatorView,
           meta: { title: "Creator" },
         },
+        {
+          path: "profile",
+          name: "profile",
+          component: OwnProfile,
+          meta: {title: "Profile"}
+        }
       ],
       linkActiveClass: "active btn btn-primary text-light",
     },

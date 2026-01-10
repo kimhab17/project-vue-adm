@@ -69,9 +69,10 @@ const onThumbnailChange = (event) => {
     const file = event.target.files[0] || null
     formData.value.thumbnail = file
 
+    // convert to url and display in preview
     if (file) {
         thumbnailPreview.value = URL.createObjectURL(file);
-    } else {
+    } else { // ka pea if vea not image
         thumbnailPreview.value = '';
     }
 }

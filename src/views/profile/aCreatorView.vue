@@ -35,7 +35,4 @@ const profileStore = useProfileStore();
 onMounted(async () => {
     await profileStore.fecthProfileById(route.params.id);
 });
-// for (aticle in profileStore.aCreator) {
-//     console.log(aticle);
-// }
 </script>

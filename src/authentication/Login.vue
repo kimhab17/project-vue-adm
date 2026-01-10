@@ -15,7 +15,6 @@
                             <div class="mb-3">
                                 <base-input label="Email" id="email" type="text" v-model="email"
                                     placeholder="Input Email..." @input="validateEmail" :error="errors.email" />
-
                             </div>
 
                             <div class="mb-3 position-relative">

@@ -77,6 +77,7 @@ export const useArtitleStore = defineStore("article", () => {
 
   // create article
   const createArticle = async (payload) => {
+    console.log(payload);
     try {
       const res = await api.post(`/articles`, payload);
       console.log(res.data);

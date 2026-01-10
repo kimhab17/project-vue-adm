@@ -56,7 +56,7 @@ const handlePublish = async () => {
         }
         // reset all input call from Article form
         formRef.resetForm();
-        router.push({ name: 'article.index' });
+        router.push({ name: 'dashboard' });
     } catch (error) {
         console.error('Error creating article:', error);
     } finally {

@@ -6,10 +6,12 @@
 
         <span class="navbar-brand mb-0 h5">Portfolio</span>
 
-        <div class="ms-auto d-flex align-items-center">
+        <RouterLink :to="{name: 'profile'}">
+            <div class="ms-auto d-flex align-items-center">
             <img :src="userImg" class="rounded-circle me-2 img-fluid" alt="avatar" width="40" height="40" />
             <span class="text-white">{{ userName }}</span>
         </div>
+        </RouterLink>
     </nav>
 </template>
 <script setup>
