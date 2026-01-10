@@ -1,6 +1,8 @@
 <template>
     <div>
-        <h1>own Profile</h1>
+        <div class="my-4">
+            <h3>{{ authStore.user.firstName }} {{ authStore.user.lastName }}</h3>
+        </div>
         <div v-if="isToast">
             <base-toast :isResult="profileStore.uploadAvatar"
                 :message="profileStore.uploadAvatar ? 'Upload Success !!' : 'Failed Upload'">
@@ -8,18 +10,15 @@
         </div>
         <div>
             <div>
-                <label class="form-label mt-3">Thumbnail</label>
-
-                <!-- image priview -->
-                <div v-if="avatarPreview || existingAvatar" class="mb-2">
+                <!-- Avatar priview -->
+                <div v-if="avatarPreview || existingAvatar" class="mb-2 position-relative">
                     <img :src="avatarPreview || existingAvatar" alt="Thumbnail Preview"
-                        style="max-width: 200px; border-radius: 4px;" />
+                        style="max-width: 200px; border-radius: 50%;" />
+                    <div class="position-absolute" style="left: 16%; top: 70%;">
+                        <span class="btn btn-outline-dark rounded-5" @click="isModalUpload = true"><i
+                                class="bi bi-card-image fs-4"></i></span>
+                    </div>
                 </div>
-                <!-- input image types -->
-                <input type="file" class="form-control" @change="onThumbnailChange" />
-                <base-button @click="handalUploadAvatar" :isLoading="profileStore.avaLoadding">
-                    Save Image
-                </base-button>
             </div>
             <div>
                 <div class="row">
@@ -40,6 +39,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- modal block -->
+        <div v-if="isModalUpload">
+            <base-modal title="Upload Image" @close="isModalUpload = false">
+                <template #body>
+                    <div>
+                        <cropper class="cropper" :src="uploadedImage" ref="cropperRef" :stencil-props="{
+                            aspectRatio: 10 / 12
+                        }" />
+                    </div>
+                    <label for="img-upload" class="btn btn-outline-secondary w-100">
+                        Chose Image
+                    </label>
+                    <input type="file" id="img-upload" class="form-control d-none" @change="onThumbnailChange" />
+                </template>
+                <template #footer>
+                    <base-button @click="handalUploadAvatar" :isLoading="profileStore.avaLoadding">
+                        Save Image
+                    </base-button>
+                </template>
+            </base-modal>
+        </div>
     </div>
 </template>
 <script setup>
@@ -48,17 +69,22 @@ import { useRouter } from 'vue-router';
 import { useProfileStore } from '@/stores/profile';
 import { useAuthStore } from '@/stores/auth';
 import { useArtitleStore } from '@/stores/article';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+
 const profileStore = useProfileStore();
 const artStore = useArtitleStore();
 const authStore = useAuthStore();
 const router = useRouter();
 
+let isModalUpload = ref(false);
 let isToast = ref(false);
 
-let file = ref('');
 let avatarPreview = ref('');
 let existingAvatar = ref('');
+let uploadedImage = ref(null);
 
+let cropperRef = ref(null)
 let first_name = ref('');
 let last_name = ref('')
 let email = ref('')
@@ -74,26 +100,24 @@ onMounted(async () => {
 })
 
 const onThumbnailChange = (event) => {
-    file.value = event.target.files[0];
-    // check value formData
-    // for (let [key, value] of formData.entries()) {
-    //     console.log(key, value);
-    // }
-    // convert to url and display in preview
-    if (file.value) {
-        avatarPreview.value = URL.createObjectURL(file.value);
-    }
-    else {
-        avatarPreview.value = '';
-    }
+    // get file when we choosed file
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // render image when ready selected to image crop
+    const reader = new FileReader();
+    reader.onload = (ev) => (uploadedImage.value = ev.target.result);
+    reader.readAsDataURL(file);
+    // console.log(file);
 }
 
 // button submit avatar
 const handalUploadAvatar = async () => {
+    const canvas = cropperRef.value.getResult().canvas;
+    const avatar = canvas.toDataURL("image/jpeg", 0.9);
     isToast.value = true;
-    let formData = new FormData();
-    formData.append('avatar', file.value);
-    await profileStore.uploadAvatar(formData);
+    await profileStore.uploadAvatarBase64(avatar);
+    uploadedImage.value = null;
     if (profileStore.uploadAvatar) {
         router.push({ name: 'dashboard' });
         artStore.getAllArticle();
@@ -113,3 +137,10 @@ const handalUpdateData = async () => {
     }
 }
 </script>
+<style scoped>
+.cropper {
+    height: 400px;
+    width: 600px;
+    background: #DDD;
+}
+</style>

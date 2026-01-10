@@ -23,19 +23,34 @@ export const useProfileStore = defineStore("profile", () => {
   };
 
   // upload avatar
-  const uploadAvatar = async (payload) => {
+  const uploadAvatar = async (file) => {
     // for (let [key, value] of payload.entries()) {
     //   console.log(key, value);
     // }
+    // console.log(file)
     try {
       avaLoadding.value = true;
-      const res = await api.post(`/profile/avatar`, payload, {
+      let formData = new FormData();
+      formData.append("avatar", file);
+      const res = await api.post(`/profile/avatar`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      avaLoadding.value = false;
-      console.log(res.data.result);
+      return res.data;
     } catch (err) {
-      console.log(err);
+      console.log("upload avatar error", err);
+    } finally {
+      avaLoadding.value = false;
+    }
+  };
+
+  const uploadAvatarBase64 = async (myImage) => {
+    try {
+      const response = await fetch(myImage);
+      const blob = await response.blob();
+      const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+      return await uploadAvatar(file);
+    } catch (err) {
+      console.log("Failed to upload avatar (base64):", err);
     }
   };
 
@@ -60,5 +75,6 @@ export const useProfileStore = defineStore("profile", () => {
     fecthProfileById,
     uploadAvatar,
     updateProfileData,
+    uploadAvatarBase64,
   };
 });
