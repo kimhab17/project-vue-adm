@@ -4,7 +4,6 @@ export function useRequiredValidator() {
   console.log("error validator:", errors);
   const validateField = (field, value, message) => {
     errors[field] = value ? "" : message;
-    // console.log(!errors[field]);
     return !errors[field];
   };
   return { errors, validateField };

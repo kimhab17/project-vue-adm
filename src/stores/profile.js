@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 import api from "@/api/api";
 import { ref } from "vue";
+import { useAuthStore } from "./auth";
 
 export const useProfileStore = defineStore("profile", () => {
+  const authStore = useAuthStore();
   const isLoadding = ref(false);
   const avaLoadding = ref(false);
   const dataLoadding = ref(false);
@@ -31,10 +33,13 @@ export const useProfileStore = defineStore("profile", () => {
     try {
       avaLoadding.value = true;
       let formData = new FormData();
+
       formData.append("avatar", file);
       const res = await api.post(`/profile/avatar`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
+      if (authStore.user) authStore.user.avatar = res.data.data.avatar;
       return res.data;
     } catch (err) {
       console.log("upload avatar error", err);
@@ -67,6 +72,14 @@ export const useProfileStore = defineStore("profile", () => {
       console.log(err);
     }
   };
+
+  // delete avatar
+  const deleteAvatar = async () => {
+    const res = await api.delete(`/profile/avatar`);
+    console.log(authStore.user);
+    // if (authStore.user) authStore.user.avatar = res.data.data.avatar || null;
+    return res.data;
+  };
   return {
     isLoadding,
     avaLoadding,
@@ -76,5 +89,6 @@ export const useProfileStore = defineStore("profile", () => {
     uploadAvatar,
     updateProfileData,
     uploadAvatarBase64,
+    deleteAvatar,
   };
 });

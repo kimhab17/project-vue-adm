@@ -6,27 +6,32 @@
 
         <span class="navbar-brand mb-0 h5">Portfolio</span>
 
-        <RouterLink :to="{name: 'profile'}">
+        <RouterLink :to="{ name: 'profile' }">
             <div class="ms-auto d-flex align-items-center">
-            <img :src="userImg" class="rounded-circle me-2 img-fluid" alt="avatar" width="40" height="40" />
-            <span class="text-white">{{ userName }}</span>
-        </div>
+                <img :src="authStore.user?.avatar" class="rounded-circle me-2 img-fluid" alt="avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                <span class="text-white">{{ userName }}</span>
+            </div>
         </RouterLink>
     </nav>
 </template>
 <script setup>
 import { useSideStatusStore } from '@/stores/sidebarStatus';
 import { useAuthStore } from '@/stores/auth';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const statuesModal = useSideStatusStore();
 const authStore = useAuthStore();
-const User = authStore.user;
+
 const userName = ref("");
 const userImg = ref("");
 
-userName.value = User.firstName + " " + User.lastName;
-userImg.value = User.avatar;
+onMounted(async () => {
+    await authStore.fetchProfile();
+    userName.value = authStore.user.firstName + " " + authStore.user.lastName;
+    userImg.value = authStore?.user.avatar;
+})
+
 </script>
 
 <style scoped>
